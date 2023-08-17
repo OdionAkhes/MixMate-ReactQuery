@@ -17,7 +17,7 @@ const CocktailList = ({ drinks }) => {
       info: strAlcoholic,
       glass: strGlass,
     };
-  });
+  })
   return (
     <Wrapper>
       {formattedDrinks.map((item) => {

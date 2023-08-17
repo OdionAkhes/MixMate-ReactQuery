@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, Navigate} from "react-router-dom";
 
 import axios from 'axios'
 import Wrapper from '../assets/wrappers/CocktailPage'
@@ -10,7 +10,7 @@ const singleCocktailUrl =
 export const loader = async ({ params }) => {
   const { id } = params;
   const { data } = await axios.get(`${singleCocktailUrl}${id}`);
-  console.log(data);
+
 
   return { id, data };
 };
@@ -19,7 +19,10 @@ export const loader = async ({ params }) => {
 
 const Cocktail = () => {
   const { id, data } = useLoaderData()
-  
+
+ if (!data) return <Navigate to="/" />;
+
+  console.log(data)
   const singleDrink = data.drinks[0]
   console.log(singleDrink)
   const { strDrink: name,
@@ -32,7 +35,7 @@ const Cocktail = () => {
 
 
   const validIngredients = Object.keys(singleDrink).filter(key => key.startsWith("strIngredient") && singleDrink[key] !== null).map(key => singleDrink[key])
-  console.log(validIngredients)
+console.log(validIngredients)
   return (
     <Wrapper>
       <header>
@@ -42,7 +45,7 @@ const Cocktail = () => {
         <h3>{name}</h3>
       </header>
       <div className="drink">
-        <img src={image} alt="" />
+        <img src={image} alt="" className='img' />
         <div className="drink-info">
           <p>
             <span className="drink-data">name :</span>
@@ -62,14 +65,11 @@ const Cocktail = () => {
           </p>
           <p>
             <span className='drink-data'>ingredients :</span>
-              {validIngredients.map((item, index) => {
-                return <span className='img' key={item}
-                >
-                  {item}{index < validIngredients.length - 1 ?  "," : ""}
-                </span>
-              })
-              }
-       
+            {validIngredients.map((item, index) => {
+              return <span className="ing" key={item}>{item}
+              {index < validIngredients.length -1 ? "," : ""}
+              </span>
+             })}
           </p>
           <p>
             <span className="drink-data">instructions :</span>
