@@ -27,38 +27,58 @@ const Cocktail = () => {
     strAlcoholic: info,
     strCategory: category,
     strGlass: glass,
-    strInstructions: instructios
+    strInstructions: instructions
   } = singleDrink
 
-  return <Wrapper>
-    <header>
-      <Link to="/" className="btn">
-        back home
-      </Link>
-      <h3>{ name}</h3>
-    </header>
-    <div className="drink">
-      <img src={image} alt="" />
-       <div className='drink-info'>
+
+  const validIngredients = Object.keys(singleDrink).filter(key => key.startsWith("strIngredient") && singleDrink[key] !== null).map(key => singleDrink[key])
+  console.log(validIngredients)
+  return (
+    <Wrapper>
+      <header>
+        <Link to="/" className="btn">
+          back home
+        </Link>
+        <h3>{name}</h3>
+      </header>
+      <div className="drink">
+        <img src={image} alt="" />
+        <div className="drink-info">
           <p>
-            <span className='drink-data'>name :</span>
+            <span className="drink-data">name :</span>
             {name}
           </p>
           <p>
-            <span className='drink-data'>category :</span>
+            <span className="drink-data">category :</span>
             {category}
           </p>
           <p>
-            <span className='drink-data'>info :</span>
+            <span className="drink-data">info :</span>
             {info}
           </p>
           <p>
-            <span className='drink-data'>glass :</span>
+            <span className="drink-data">glass :</span>
             {glass}
-        </p>
+          </p>
+          <p>
+            <span className='drink-data'>ingredients :</span>
+              {validIngredients.map((item, index) => {
+                return <span className='img' key={item}
+                >
+                  {item}{index < validIngredients.length - 1 ?  "," : ""}
+                </span>
+              })
+              }
+       
+          </p>
+          <p>
+            <span className="drink-data">instructions :</span>
+            {instructions}
+          </p>
         </div>
-    </div>
-  </Wrapper>;
+      </div>
+    </Wrapper>
+  );
 }
 
 export default Cocktail
