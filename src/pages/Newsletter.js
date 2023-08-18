@@ -1,8 +1,33 @@
 import React from 'react'
+import { Form,redirect,useNavigation } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from "react-toastify";
+const newsletterUrl = "https://www.course-api.com/cocktails-newsletter";
 
+
+
+
+export const action = async ({ request }) => {
+ const formData =    await request.formData()
+  const data = Object.fromEntries(formData)
+  try {
+    const response = await axios.post(newsletterUrl, data)
+    toast.success(response.data.msg)
+    return redirect("/")
+  } catch (error) {
+    toast.error(error?.response?.data?.msg)
+    return error
+}
+
+  };
 const Newsletter = () => {
+  const navigation = useNavigation();
+  console.log(navigation)
+  const isSubmitting = navigation.state === "submitting"
+
+
   return (
-    <form action="" className="form" >
+    <Form action="" className="form" method="POST">
       <h4 style={{ textAlign: "center", marginBottom: "2rem" }}>
         our Newsletter
       </h4>
@@ -11,14 +36,7 @@ const Newsletter = () => {
         <label htmlFor="name" className="form-label" name="name">
           name
         </label>
-        <input
-          defaultValue="john"
-          type="text"
-          name="name"
-          id="name
-        required"
-          className="form-input"
-        />
+        <input type="text" name="name" id="name" className="form-input" />
       </div>
       {/* lastName */}
       <div className="form-row">
@@ -29,7 +47,6 @@ const Newsletter = () => {
           type="text"
           className="form-input"
           name="lastName"
-          defaultValue="smith"
           id="lastName"
           required
         />
@@ -52,10 +69,11 @@ const Newsletter = () => {
         type="submit"
         style={{ marginTop: "0.5rem" }}
         className="btn btn-block"
+        disabled={isSubmitting}
       >
-        submit
+        {isSubmitting ? "submitting" : "submit"}
       </button>
-    </form>
+    </Form>
   );
 }
 
